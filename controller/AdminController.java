@@ -22,7 +22,8 @@ public class AdminController {
 					+ "3. Get Manufacturer Details \n " + "4. Get All Manufacturers Details \n "
 					+ "5. Exit as Admin");
 			System.out.println("Enter Your Choice");
-			System.out.println("========================================================");
+			System.out.println("===================================================================="
+					+ "==========================================================");
 			try {
 				int adminChoice = sc.nextInt();
 				switch (adminChoice) {
@@ -70,9 +71,8 @@ public class AdminController {
 					int manId = sc.nextInt();
 					ManufacturerInfoBean man = adminSer.getManufacturerDetails(manId);
 					if(man!=null) {
-					System.out.println(
-							"==========================================================================="
-									+ "=====================================");
+					System.out.println("===================================================================="
+								+ "==========================================================");
 					System.out.println(" ManufacturerName = " + man.getManufacturerName() + " \t Product = "
 							+ man.getProduct().getProductName() + " \t Description = "
 							+ man.getDescription() + " \t Product Cost = " + man.getProductCost());
@@ -96,10 +96,10 @@ public class AdminController {
 
 					break;
 				case 4:
-					System.out.println(
-							"==========================================================================="
-									+ "=====================================");
+					System.out.println("===================================================================="
+							+ "==========================================================");
 					List<ManufacturerInfoBean> manufacturers = adminSer.getAllManufacturersDetails();
+					if(manufacturers!=null) {
 					Iterator<ManufacturerInfoBean> itr = manufacturers.iterator();
 					while (itr.hasNext()) {
 						ManufacturerInfoBean mans = itr.next();
@@ -108,9 +108,11 @@ public class AdminController {
 								+ " \t || Description = " + mans.getDescription() + " \t || Product Cost = "
 								+ mans.getProductCost()+" \n MId = "+mans.getManufacturerId());
 					}
-					System.out.println(
-							"==========================================================================="
-									+ "=====================================");
+					System.out.println("===================================================================="
+							+ "==========================================================");
+					} else {
+						System.out.println("There are no manufacturers");
+					}
 					break;
 				case 5:
 					break;

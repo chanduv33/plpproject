@@ -24,7 +24,8 @@ public class CustomerController {
 			System.out.println("Available Choices are..");
 			System.out.println(" 1. Buy Product \n " + "2. Get Order Dealits \n " + "3. Exit");
 			System.out.println("Enter Your Choice");
-			System.out.println("========================================================");
+			System.out.println("===================================================================="
+					+ "==========================================================");
 			try {
 				int customerChoice = sc.nextInt();
 				switch (customerChoice) {
@@ -51,7 +52,11 @@ public class CustomerController {
 					customer.setCustomerId(sc.nextInt());
 					System.out.println("Enter Order Id");
 					customer.setOrderId(sc.nextInt());
-					cusSer.buyProduct(dealer, customer,pname);
+					if(cusSer.buyProduct(dealer, customer,pname)) {
+						System.out.println("Order Placed Successfully");
+					} else {
+						System.out.println("Order Placement has been failed");
+					}
 					System.out.println("Do u want to place more orders?Y/N");
 					String ch = sc.next();
 					if(ch.equals("n") || ch.equals("N"))
@@ -62,9 +67,13 @@ public class CustomerController {
 					System.out.println("Enter Order Id to get Payment Details");
 					int oid = sc.nextInt();
 					CustomerInfoBean bean = cusSer.getOrderDetails(oid);
+					if(bean!=null) {
 					System.out.println(
 							" Order Id " + bean.getOrderId() + " \t ProductName " + bean.getProduct().getProductName()
 									+ " \t Date Of Order " + bean.getDateOfOrder() + " \t Amount " + bean.getAmount());
+					} else {
+						System.out.println("Order not found");
+					}
 					break;
 				case 3:
 					break;

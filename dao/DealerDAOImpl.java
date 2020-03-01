@@ -26,6 +26,7 @@ public class DealerDAOImpl implements DealerDAO {
 				product.setDateOfOrder(date);
 				product.setDateOfDelivery(LocalDate.now().plusDays(2));
 				product.setDealer(bean);
+				bean.setSellingPrice(product.getCostPrice()+50);
 				bean.getProduct().add(product);
 				product.setAmount(quantity * product.getCostPrice());
 				System.out.println(bean.getProduct());

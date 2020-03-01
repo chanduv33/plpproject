@@ -31,7 +31,13 @@ import com.capgemini.storesmanagementsystem.validation.Validations;
 
 public class StoresManagementApp {
 	public static void main(String[] args) {
-		System.out.println("\t \t Welcome to Stores Management System Appication  ");
+		System.out.println("\t \t ===============================================================\t \t");
+		System.out.println("\t \t ||                                                           ||");
+		System.out.println("\t \t || \t Welcome to Stores Management System Appication       ||");
+		System.out.println("\t \t ||                                                           ||");
+		System.out.println("\t \t ===============================================================\t \t");
+		System.out.println("===================================================================="
+				+ "==========================================================");
 		Scanner sc = new Scanner(System.in);
 		AdminService adminSer = new AdminServiceImpl();
 		DealerService dealerSer = new DealerServiceImpl();
@@ -45,7 +51,8 @@ public class StoresManagementApp {
 			System.out.println("Who You are..??");
 			System.out.println("Available options \n " + "1. Admin \n " + "2. Manufacturer \n " + "3. Dealer \n "
 					+ "4. Customer \n " + "5. Exit \n ");
-			System.out.println("========================================================");
+			System.out.println("===================================================================="
+					+ "==========================================================");
 			System.out.println("Enter Your Choice");
 			try {
 				int choice = sc.nextInt();
@@ -81,7 +88,7 @@ public class StoresManagementApp {
 						System.out.println("Login Unsuccessful");
 					}
 					} else {
-						System.out.println("Enter Valid Password");
+						System.out.println("Password Must contains more than 4 letters");
 					}
 					break;
 				case 3:
@@ -100,12 +107,13 @@ public class StoresManagementApp {
 						System.out.println("Login Unsuccessful");
 					}
 					} else {
-						System.out.println("Enter Valid Password");
+						System.out.println("Password Must contains more than 4 letters");
 					}
 					
 					break;
 				case 4:
 					System.out.println("1. Register \n 2. Login \n Enter your choice...");
+					try {
 					int ch = sc.nextInt();
 					if(ch==1) {
 						System.out.println("Enter Customer id");
@@ -139,10 +147,17 @@ public class StoresManagementApp {
 						System.out.println("Customer Doesnt exists");
 					}
 					} else {
-						System.out.println("Enter Valid Password");
+						System.out.println("Password Must contains more than 4 letters");
 					}
 					} else {
 						System.out.println("Enter valid choice");
+					}
+					} catch (InputMismatchException e) {
+						try {
+							throw new EnterValidInputException();
+						} catch (EnterValidInputException exp) {
+							System.out.println(exp.getMessage());
+						}
 					}
 					break;
 				case 5:

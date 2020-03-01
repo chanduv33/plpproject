@@ -17,10 +17,11 @@ public class ManufacturerController {
 		while (true) {
 			System.out.println("Welcome Manufacturer");
 			System.out.println("Operation you would like to perform ?");
-			System.out.println("1. Add Dealer \n " + "2. Set CostPrice \n" + " " + "3. Get Payment Details \n "
+			System.out.println(" 1. Add Dealer \n " + "2. Set CostPrice \n" + " " + "3. Get Payment Details \n "
 					+ "4. Exit as Manufacturer");
 			System.out.println("Enter Your Choice");
-			System.out.println("========================================================");
+			System.out.println("===================================================================="
+					+ "==========================================================");
 			try {
 				int manufacturerChoice = sc.nextInt();
 				switch (manufacturerChoice) {
@@ -51,14 +52,22 @@ public class ManufacturerController {
 					product.setProductId(sc.nextInt());
 					System.out.println("Enter new Cost Price");
 					product.setCostPrice(sc.nextDouble());
-					manSer.setCostPrice(product);
+					if(manSer.setCostPrice(product)) {
+						System.out.println("Updation Successful");
+					} else {
+						System.out.println("Updation Unsuccessfull");
+					}
 					break;
 				case 3:
 					System.out.println("Enter Order Id to get Payment Details");
 					ProductInfoBean bean = manSer.getPaymentDetails(sc.nextInt());
+					if(bean!=null) {
 					System.out.println(" Order Id " + bean.getOrderId() + " \t ProductName " + bean.getProductName()
 							+ " \t Date Of Order " + bean.getDateOfOrder() + " \t Amount " + bean.getAmount()
 							+ " \t Date of Delivery " + bean.getDateOfDelivery());
+					} else {
+						System.out.println("Incorrect Order details");
+					}
 				}
 			} catch (InputMismatchException e) {
 				try {

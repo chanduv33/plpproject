@@ -24,10 +24,15 @@ public class DealerController {
 		while(true) {
 		System.out.println("Welcome Dealer");
 		System.out.println("Operation you would like to perform ?");
-		System.out.println("1. Place Order \n" + "2. Set Selling Price \n" + "3. Get Payment Details "
-				+ "\n4. Get All Products \n5. Get NumberofProducts \n6.Exit");
+		System.out.println(" 1. Place Order \n" 
+				+ " 2. Set Selling Price \n" 
+				+ " 3. Get Payment Details \\n"
+				+ " 4. Get All Products \n"
+				+ " 5. Get NumberofProducts \n"
+				+ " 6. Exit");
 		System.out.println("Enter Your Choice");
-		System.out.println("========================================================");
+		System.out.println("===================================================================="
+				+ "==========================================================");
 		try {
 			int dealerChoice = sc.nextInt();
 			switch (dealerChoice) {
@@ -49,6 +54,8 @@ public class DealerController {
 						System.out.println("Enter Order Id");
 						manBean.getProduct().setOrderId(sc.nextInt());
 						dealerSer.placeOrder(manBean.getProduct(), quantity, id);
+					} else {
+						System.out.println("Placing order has been failed");
 					}
 				}
 				System.out.println("Do u want to place more orders?Y/N");

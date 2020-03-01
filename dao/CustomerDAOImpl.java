@@ -31,6 +31,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 								cust.setDateOfOrder(date);
 								cust.setDateOfDelivery(date.plusDays(3));
 								cust.setDealer(bean);
+								cust.setOrderId(customer.getOrderId());
 								cust.setAmount(bean.getSellingPrice());
 								System.out.println(cust);
 								return true;
