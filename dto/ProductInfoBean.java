@@ -7,7 +7,6 @@ import java.util.Date;
 import lombok.Data;
 import lombok.ToString.Exclude;
 
-@Data
 public class ProductInfoBean {
 	
 	
@@ -15,17 +14,95 @@ public class ProductInfoBean {
 	private  int orderId;
 	private String productName;
 	private double costPrice;
-	@Exclude
-	@lombok.EqualsAndHashCode.Exclude
 	private DealerInfoBean dealer;
 	private LocalDate dateOfOrder;
 	private double amount;
 	private LocalDate dateOfDelivery;
-	@Exclude
 	private ManufacturerInfoBean manufacturer;
+	private int quantity;
 	
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+
 	public ProductInfoBean() {
 		
+	}
+
+	public int getProductId() {
+		return productId;
+	}
+
+	public void setProductId(int productId) {
+		this.productId = productId;
+	}
+
+	public int getOrderId() {
+		return orderId;
+	}
+
+	public void setOrderId(int orderId) {
+		this.orderId = orderId;
+	}
+
+	public String getProductName() {
+		return productName;
+	}
+
+	public void setProductName(String productName) {
+		this.productName = productName;
+	}
+
+	public double getCostPrice() {
+		return costPrice;
+	}
+
+	public void setCostPrice(double costPrice) {
+		this.costPrice = costPrice;
+	}
+
+	public DealerInfoBean getDealer() {
+		return dealer;
+	}
+
+	public void setDealer(DealerInfoBean dealer) {
+		this.dealer = dealer;
+	}
+
+	public LocalDate getDateOfOrder() {
+		return dateOfOrder;
+	}
+
+	public void setDateOfOrder(LocalDate dateOfOrder) {
+		this.dateOfOrder = dateOfOrder;
+	}
+
+	public double getAmount() {
+		return amount;
+	}
+
+	public void setAmount(double amount) {
+		this.amount = amount;
+	}
+
+	public LocalDate getDateOfDelivery() {
+		return dateOfDelivery;
+	}
+
+	public void setDateOfDelivery(LocalDate dateOfDelivery) {
+		this.dateOfDelivery = dateOfDelivery;
+	}
+
+	public ManufacturerInfoBean getManufacturer() {
+		return manufacturer;
+	}
+
+	public void setManufacturer(ManufacturerInfoBean manufacturer) {
+		this.manufacturer = manufacturer;
 	}
 	
 }

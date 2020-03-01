@@ -27,6 +27,7 @@ import com.capgemini.storesmanagementsystem.service.DealerService;
 import com.capgemini.storesmanagementsystem.service.DealerServiceImpl;
 import com.capgemini.storesmanagementsystem.service.ManufacturerService;
 import com.capgemini.storesmanagementsystem.service.ManufacturerServiceImpl;
+import com.capgemini.storesmanagementsystem.validation.Validations;
 
 public class StoresManagementApp {
 	public static void main(String[] args) {
@@ -38,6 +39,7 @@ public class StoresManagementApp {
 		CustomerService cusSer = new CustomerServiceImpl();
 		String uname;
 		String password;
+		Validations val = new Validations();
 		while (true) {
 
 			System.out.println("Who You are..??");
@@ -69,14 +71,18 @@ public class StoresManagementApp {
 					uname = sc.nextLine();
 					System.out.println("Enter Password");
 					password = sc.nextLine();
-					if (uname.equals("Manufacturer") && password.equals("manufacturer@123")) {
+					if(val.passwordValidtion(password)) {
+						ManufacturerInfoBean manufacturer=manSer.login(uname, password);
+					if (manSer.login(uname, password)!=null) {
 						System.out.println("Manufacturer Login Successful");
-						ManufacturerController manufacturer = new ManufacturerController();
-						manufacturer.manufacturer();
+						ManufacturerController controller = new ManufacturerController();
+						controller.manufacturer();
 					} else {
 						System.out.println("Login Unsuccessful");
 					}
-					
+					} else {
+						System.out.println("Enter Valid Password");
+					}
 					break;
 				case 3:
 					System.out.println("Enter UserName");
@@ -84,29 +90,60 @@ public class StoresManagementApp {
 					uname = sc.nextLine();
 					System.out.println("Enter Password");
 					password = sc.nextLine();
-					if (uname.equals("Dealer") && password.equals("dealer@123")) {
+					if(val.passwordValidtion(password)) {
+						DealerInfoBean dealer=dealerSer.login(uname, password);
+					if (dealer!=null) {
 						System.out.println("Dealer Login Successful");
-						DealerController dealer = new DealerController();
-						dealer.dealer();
+						DealerController controller = new DealerController();
+						controller.dealer();
 					} else {
 						System.out.println("Login Unsuccessful");
+					}
+					} else {
+						System.out.println("Enter Valid Password");
 					}
 					
 					break;
 				case 4:
-					System.out.println("Enter UserName");
-					sc.nextLine();
-					uname = sc.nextLine();
+					System.out.println("1. Register \n 2. Login \n Enter your choice...");
+					int ch = sc.nextInt();
+					if(ch==1) {
+						System.out.println("Enter Customer id");
+						int cid = sc.nextInt();
+						System.out.println("Enter Email");
+						String email = sc.next();
+						System.out.println("Enter Password");
+						String pwd = sc.next();
+			
+						if(val.passwordValidtion(pwd) && val.emailValidation(email) ) {
+							CustomerInfoBean bean = new CustomerInfoBean();
+							bean.setCustomerId(cid);
+							bean.setPassword(pwd);
+							bean.setEmail(email);
+							CollectionDbClass.customerSet.add(bean);
+						} else {
+							System.out.println("Password Must contains more than 4 letters");
+						}
+					} else if(ch==2) {
+					System.out.println("Enter Customer id");
+					int id = sc.nextInt();
 					System.out.println("Enter Password");
-					password = sc.nextLine();
-					if (uname.equals("Customer") && password.equals("customer@123")) {
-						System.out.println("Customer Login Successful");
-						CustomerController customer = new CustomerController();
-						customer.customer();
+					password = sc.next();
+					if(val.passwordValidtion(password)) {
+						CustomerInfoBean customer=cusSer.login(id, password);
+					if (customer!=null) {
+						System.out.println("Csutomer Login Successful");
+						CustomerController controller = new CustomerController();
+						controller.customer();
 					} else {
-						System.out.println("Login Unsuccessful");
+						System.out.println("Customer Doesnt exists");
 					}
-					
+					} else {
+						System.out.println("Enter Valid Password");
+					}
+					} else {
+						System.out.println("Enter valid choice");
+					}
 					break;
 				case 5:
 					System.exit(0);

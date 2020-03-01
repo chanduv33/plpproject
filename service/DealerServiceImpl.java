@@ -1,5 +1,7 @@
 package com.capgemini.storesmanagementsystem.service;
 
+import java.util.List;
+
 import com.capgemini.storesmanagementsystem.dao.DealerDAO;
 import com.capgemini.storesmanagementsystem.dao.DealerDAOImpl;
 import com.capgemini.storesmanagementsystem.dto.DealerInfoBean;
@@ -17,5 +19,20 @@ public class DealerServiceImpl implements DealerService{
 	@Override
 	public boolean setSellingPrice(DealerInfoBean dealer,int id) {
 		return dao.setSellingPrice(dealer,id);
+	}
+
+	@Override
+	public List<ProductInfoBean> getAllProducts(int id) {
+		return dao.getAllProducts(id);
+	}
+
+	@Override
+	public int getNumberOfProducts(String name, int id) {
+		return dao.getNumberOfProducts(name, id);
+	}
+
+	@Override
+	public DealerInfoBean login(String name, String password) {
+		return dao.login(name, password);
 	}
 }

@@ -3,6 +3,7 @@ package com.capgemini.storesmanagementsystem.controller;
 import java.util.Arrays;
 import java.util.InputMismatchException;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Scanner;
 
 import com.capgemini.storesmanagementsystem.db.CollectionDbClass;
@@ -23,8 +24,8 @@ public class DealerController {
 		while(true) {
 		System.out.println("Welcome Dealer");
 		System.out.println("Operation you would like to perform ?");
-		System.out.println(" 1. Place Order \n " + "2. Set Selling Price \n" + "3. Get Payment Details \n "
-				+ "4. Exit as Dealer");
+		System.out.println("1. Place Order \n" + "2. Set Selling Price \n" + "3. Get Payment Details "
+				+ "\n4. Get All Products \n5. Get NumberofProducts \n6.Exit");
 		System.out.println("Enter Your Choice");
 		System.out.println("========================================================");
 		try {
@@ -64,15 +65,39 @@ public class DealerController {
 				dealer.setDealerId(sc.nextInt());
 				System.out.println("Enter Product Id");
 				int pid	= sc.nextInt();
-				dealerSer.setSellingPrice(dealer,pid);
+				if(dealerSer.setSellingPrice(dealer,pid)) {
+					System.out.println("Price has been set Successfully");
+				} else {
+					System.out.println("No products are there to set price");
+				}
 				break;
 			case 3 :
 				System.out.println("Enter Product Id");
 				int oid = sc.nextInt();
 				manSer.getPaymentDetails(oid);
 				break;
-			case 4 : break;
+			case 4 : System.out.println("Enter your id");
+			int id = sc.nextInt();
+			List<ProductInfoBean> prods = dealerSer.getAllProducts(id);
+			if(prods!=null) {
+			for (ProductInfoBean productInfoBean : prods) {
+				System.out.println("Product "+productInfoBean.getProductName());
 			}
+			} else {
+				System.out.println("Products not found");
+			}
+			break;
+			case 5 : System.out.println("Enter your id");
+			 	int did = sc.nextInt();
+			 	System.out.println("Enter product Name");
+			 	sc.nextLine();
+			 	String name = sc.nextLine();
+			 	System.out.println("Product Count is "+dealerSer.getNumberOfProducts(name, did));
+			case 6 : break;
+			default : System.out.println("Enter valid choice");
+			}
+			
+			
 		} catch (InputMismatchException e) {
 			try {
 				throw new EnterValidInputException();

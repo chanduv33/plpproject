@@ -30,9 +30,12 @@ public class AdminController {
 					while(true) {
 					ManufacturerInfoBean manufacturer = new ManufacturerInfoBean();
 					System.out.println("Enter Manufacturer Name");
-					manufacturer.setManufacturerName(sc.next());
+					sc.nextLine();
+					manufacturer.setManufacturerName(sc.nextLine());
+					System.out.println("Enter Password for Manufacturer");
+					manufacturer.setPassword(sc.next());
 					System.out.println("Add Product");
-
+					
 					ProductInfoBean product = new ProductInfoBean();
 					System.out.println("Enter Product Id");
 					product.setProductId(sc.nextInt());

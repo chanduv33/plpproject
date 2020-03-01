@@ -28,9 +28,12 @@ public class ManufacturerController {
 					while(true) {
 					DealerInfoBean dealer = new DealerInfoBean();
 					System.out.println("Enter Dealer Name");
-					dealer.setDealerName(sc.next());
+					sc.nextLine();
+					dealer.setDealerName(sc.nextLine());
 					System.out.println("Enter Dealer Id");
 					dealer.setDealerId(sc.nextInt());
+					System.out.println("Enter Password for Dealer");
+					dealer.setPassword(sc.next());
 					if (manSer.addDealer(dealer)) {
 						System.out.println("Dealer Added Successfully");
 					} else {

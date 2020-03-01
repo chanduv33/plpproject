@@ -15,30 +15,47 @@ public class CustomerDAOImpl implements CustomerDAO {
 	private DealerDAOImpl dealerImpl = new DealerDAOImpl();
 	@Override
 	public boolean buyProduct(DealerInfoBean dealer,CustomerInfoBean customer,String pname) {
-		Iterator<DealerInfoBean> itr = CollectionDbClass.dealerSet.iterator();
-		while(itr.hasNext()) {
-			DealerInfoBean bean = itr.next();
-			if(bean.getDealerName().equalsIgnoreCase(dealer.getDealerName()) ){
-				//bean.getProduct().getProductName().equalsIgnoreCase(dealer.getProduct().getProductName()))
-				
-				for (ProductInfoBean  prods : bean.getProduct()) {
-					if(prods.getProductName().equals(pname)) {
-						customer.setProduct(prods);
-						dealerImpl.checkQuantity(bean,prods.getProductId());
-						LocalDate date  = LocalDate.now();
-						customer.setDateOfOrder(date);
-						customer.setDateOfDelivery(date.plusDays(3));
-						customer.setDealer(bean);
-						customer.setAmount(bean.getSellingPrice());
-						System.out.println(customer);
-						CollectionDbClass.customerSet.add(customer);
-						return true;
+		for (CustomerInfoBean cust : CollectionDbClass.customerSet) {
+			if(customer.getCustomerId()==cust.getCustomerId()) {
+				Iterator<DealerInfoBean> itr = CollectionDbClass.dealerSet.iterator();
+				while(itr.hasNext()) {
+					DealerInfoBean bean = itr.next();
+					if(bean.getDealerName().equalsIgnoreCase(dealer.getDealerName()) ){
+						//bean.getProduct().getProductName().equalsIgnoreCase(dealer.getProduct().getProductName()))
+						
+						for (ProductInfoBean  prods : bean.getProduct()) {
+							if(prods.getProductName().equals(pname)) {
+								cust.setProduct(prods);
+								dealerImpl.checkQuantity(bean,pname);
+								LocalDate date  = LocalDate.now();
+								cust.setDateOfOrder(date);
+								cust.setDateOfDelivery(date.plusDays(3));
+								cust.setDealer(bean);
+								cust.setAmount(bean.getSellingPrice());
+								System.out.println(cust);
+								return true;
+							}
+						}
 					}
 				}
 			}
 		}
+		
 		return false;
 	}
+	
+	@Override
+	public CustomerInfoBean login(int id, String password) {
+		Iterator<CustomerInfoBean> itr = CollectionDbClass.customerSet.iterator();
+		while (itr.hasNext()) {
+			CustomerInfoBean bean = itr.next();
+			if(bean.getCustomerId()==id && bean.getPassword().equals(password)) {
+				return bean;
+			}
+		}
+		return null;
+	}
+	
 	@Override
 	public CustomerInfoBean getOrderDetails(int id) {
 		Iterator<CustomerInfoBean> itr = CollectionDbClass.customerSet.iterator();

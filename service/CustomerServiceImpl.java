@@ -20,5 +20,10 @@ public class CustomerServiceImpl implements CustomerService{
 	public CustomerInfoBean getOrderDetails(int id) {
 		return dao.getOrderDetails(id);
 	}
+
+	@Override
+	public CustomerInfoBean login(int id, String password) {
+		return dao.login(id, password);
+	}
 	
 }
