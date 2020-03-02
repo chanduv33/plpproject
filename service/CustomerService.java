@@ -9,4 +9,5 @@ public interface CustomerService {
 	public boolean buyProduct(DealerInfoBean dealer,CustomerInfoBean customer,String pname);
 	public CustomerInfoBean getOrderDetails(int id);
 	public CustomerInfoBean login(int id, String password);
+	public boolean checkEmailAvailability(String email);
 }

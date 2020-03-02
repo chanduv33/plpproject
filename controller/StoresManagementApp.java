@@ -18,6 +18,7 @@ import com.capgemini.storesmanagementsystem.dto.CustomerInfoBean;
 import com.capgemini.storesmanagementsystem.dto.DealerInfoBean;
 import com.capgemini.storesmanagementsystem.dto.ManufacturerInfoBean;
 import com.capgemini.storesmanagementsystem.dto.ProductInfoBean;
+import com.capgemini.storesmanagementsystem.exception.EmailAlreadyExistsException;
 import com.capgemini.storesmanagementsystem.exception.EnterValidInputException;
 import com.capgemini.storesmanagementsystem.service.AdminService;
 import com.capgemini.storesmanagementsystem.service.AdminServiceImpl;
@@ -46,7 +47,8 @@ public class StoresManagementApp {
 		String uname;
 		String password;
 		Validations val = new Validations();
-		while (true) {
+		boolean flag=true;
+		while (flag) {
 
 			System.out.println("Who You are..??");
 			System.out.println("Available options \n " + "1. Admin \n " + "2. Manufacturer \n " + "3. Dealer \n "
@@ -112,7 +114,7 @@ public class StoresManagementApp {
 					
 					break;
 				case 4:
-					System.out.println("1. Register \n 2. Login \n Enter your choice...");
+					System.out.println(" 1. Register \n 2. Login \n Enter your choice...");
 					try {
 					int ch = sc.nextInt();
 					if(ch==1) {
@@ -122,7 +124,7 @@ public class StoresManagementApp {
 						String email = sc.next();
 						System.out.println("Enter Password");
 						String pwd = sc.next();
-			
+						if(cusSer.checkEmailAvailability(email)) {
 						if(val.passwordValidtion(pwd) && val.emailValidation(email) ) {
 							CustomerInfoBean bean = new CustomerInfoBean();
 							bean.setCustomerId(cid);
@@ -131,6 +133,13 @@ public class StoresManagementApp {
 							CollectionDbClass.customerSet.add(bean);
 						} else {
 							System.out.println("Password Must contains more than 4 letters");
+						}
+						} else {
+							try {
+								throw new EmailAlreadyExistsException();
+							} catch (EmailAlreadyExistsException e) {
+								System.out.println(e.getMessage());
+							}
 						}
 					} else if(ch==2) {
 					System.out.println("Enter Customer id");

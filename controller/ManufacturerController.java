@@ -12,7 +12,7 @@ import com.capgemini.storesmanagementsystem.service.ManufacturerServiceImpl;
 public class ManufacturerController {
 	ManufacturerService manSer = new ManufacturerServiceImpl();
 	Scanner sc = new Scanner(System.in);
-
+	boolean manufacturerFlag=true;
 	public void manufacturer() {
 		while (true) {
 			System.out.println("Welcome Manufacturer");
@@ -68,6 +68,9 @@ public class ManufacturerController {
 					} else {
 						System.out.println("Incorrect Order details");
 					}
+					break;
+				case 4 : manufacturerFlag=false;
+				break;
 				}
 			} catch (InputMismatchException e) {
 				try {
@@ -76,7 +79,8 @@ public class ManufacturerController {
 					System.out.println(exp.getMessage());
 				}
 			}
-			break;
+			if( manufacturerFlag==false) 
+				break;
 		}
 	}
 }

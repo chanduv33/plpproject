@@ -14,9 +14,11 @@ import com.capgemini.storesmanagementsystem.service.AdminServiceImpl;
 public class AdminController {
 	Scanner sc = new Scanner(System.in);
 	AdminService adminSer = new AdminServiceImpl();
+	boolean adminFlag=true;
 	public void admin() {
 		System.out.println("Welcome Admin");
-		while (true) {
+		
+		while (adminFlag) {
 			System.out.println("Operation you would like to perform ?");
 			System.out.println(" 1. Add Manufacturer \n " + "2. Update Manufacturer Details \n "
 					+ "3. Get Manufacturer Details \n " + "4. Get All Manufacturers Details \n "
@@ -28,7 +30,6 @@ public class AdminController {
 				int adminChoice = sc.nextInt();
 				switch (adminChoice) {
 				case 1:
-					while(true) {
 					ManufacturerInfoBean manufacturer = new ManufacturerInfoBean();
 					System.out.println("Enter Manufacturer Name");
 					sc.nextLine();
@@ -59,11 +60,6 @@ public class AdminController {
 						System.out.println("Manufacturer Added Successfully");
 					} else {
 						System.out.println("Adding Manufacturer Failed");
-					}
-					System.out.println("Do u want to place add Manufacturers?Y/N");
-					String ch = sc.next();
-					if(ch.equals("n") || ch.equals("N"))
-					break;
 					}
 					break;
 				case 3:
@@ -114,7 +110,7 @@ public class AdminController {
 						System.out.println("There are no manufacturers");
 					}
 					break;
-				case 5:
+				case 5: adminFlag=false;
 					break;
 				}
 			} catch (InputMismatchException e) {
@@ -125,8 +121,8 @@ public class AdminController {
 				}
 
 			}
-
-			break;
+			if( adminFlag==false) 
+				break;
 		}
 	}
 }

@@ -20,8 +20,9 @@ public class DealerController {
 	DealerService dealerSer = new DealerServiceImpl();
 	ManufacturerService manSer = new ManufacturerServiceImpl();
 	Scanner sc = new Scanner(System.in);
+	boolean dealerFlag=true;
 	public void dealer() {
-		while(true) {
+		while(dealerFlag) {
 		System.out.println("Welcome Dealer");
 		System.out.println("Operation you would like to perform ?");
 		System.out.println(" 1. Place Order \n" 
@@ -37,7 +38,6 @@ public class DealerController {
 			int dealerChoice = sc.nextInt();
 			switch (dealerChoice) {
 			case 1:
-				while(true) {
 				System.out.println("Enter Product");
 				String productName = sc.next();
 				System.out.println("Enter Manufacturer Name");
@@ -53,15 +53,12 @@ public class DealerController {
 							&& manBean.getProduct().getProductName().equalsIgnoreCase(productName)) {
 						System.out.println("Enter Order Id");
 						manBean.getProduct().setOrderId(sc.nextInt());
-						dealerSer.placeOrder(manBean.getProduct(), quantity, id);
-					} else {
-						System.out.println("Placing order has been failed");
-					}
-				}
-				System.out.println("Do u want to place more orders?Y/N");
-				String ch = sc.next();
-				if(ch.equals("n") || ch.equals("N"))
-				break;
+						if(dealerSer.placeOrder(manBean.getProduct(), quantity, id)) {
+							System.out.println("Order Placed successfully");
+						} else {
+							System.out.println("Placing order has been failed");
+						}
+					} 
 				}
 				break;
 			case 2:
@@ -84,8 +81,8 @@ public class DealerController {
 				manSer.getPaymentDetails(oid);
 				break;
 			case 4 : System.out.println("Enter your id");
-			int id = sc.nextInt();
-			List<ProductInfoBean> prods = dealerSer.getAllProducts(id);
+			int did = sc.nextInt();
+			List<ProductInfoBean> prods = dealerSer.getAllProducts(did);
 			if(prods!=null) {
 			for (ProductInfoBean productInfoBean : prods) {
 				System.out.println("Product "+productInfoBean.getProductName());
@@ -95,12 +92,13 @@ public class DealerController {
 			}
 			break;
 			case 5 : System.out.println("Enter your id");
-			 	int did = sc.nextInt();
+			 	int dealerid = sc.nextInt();
 			 	System.out.println("Enter product Name");
 			 	sc.nextLine();
 			 	String name = sc.nextLine();
-			 	System.out.println("Product Count is "+dealerSer.getNumberOfProducts(name, did));
-			case 6 : break;
+			 	System.out.println("Product Count is "+dealerSer.getNumberOfProducts(name, dealerid));
+			case 6 : dealerFlag=false;
+				break;
 			default : System.out.println("Enter valid choice");
 			}
 			
@@ -112,7 +110,8 @@ public class DealerController {
 				System.out.println(exp.getMessage());
 			}
 		}
-		break;
+		if( dealerFlag==false) 
+			break;
 		}
 	}
 }

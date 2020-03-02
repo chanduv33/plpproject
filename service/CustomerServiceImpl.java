@@ -25,5 +25,10 @@ public class CustomerServiceImpl implements CustomerService{
 	public CustomerInfoBean login(int id, String password) {
 		return dao.login(id, password);
 	}
+
+	@Override
+	public boolean checkEmailAvailability(String email) {
+		return dao.checkEmailAvailability(email);
+	}
 	
 }

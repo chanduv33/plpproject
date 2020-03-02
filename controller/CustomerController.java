@@ -17,9 +17,9 @@ import com.capgemini.storesmanagementsystem.service.CustomerServiceImpl;
 public class CustomerController {
 	CustomerService cusSer = new CustomerServiceImpl();
 	Scanner sc = new Scanner(System.in);
-
+	boolean customerFlag=true;
 	public void customer() {
-		while (true) {
+		while (customerFlag) {
 			System.out.println("Welcome Customer");
 			System.out.println("Available Choices are..");
 			System.out.println(" 1. Buy Product \n " + "2. Get Order Dealits \n " + "3. Exit");
@@ -31,7 +31,6 @@ public class CustomerController {
 				switch (customerChoice) {
 
 				case 1:
-					while(true) {
 					Set<DealerInfoBean> prods = CollectionDbClass.dealerSet;
 					Iterator<DealerInfoBean> itr = prods.iterator();
 					System.out.println("Available Products are.");
@@ -57,11 +56,6 @@ public class CustomerController {
 					} else {
 						System.out.println("Order Placement has been failed");
 					}
-					System.out.println("Do u want to place more orders?Y/N");
-					String ch = sc.next();
-					if(ch.equals("n") || ch.equals("N"))
-					break;
-					}
 					break;
 				case 2:
 					System.out.println("Enter Order Id to get Payment Details");
@@ -75,7 +69,7 @@ public class CustomerController {
 						System.out.println("Order not found");
 					}
 					break;
-				case 3:
+				case 3: customerFlag=false;
 					break;
 				}
 			} catch (InputMismatchException e) {
@@ -85,7 +79,8 @@ public class CustomerController {
 					System.out.println(exp.getMessage());
 				}
 			}
-			break;
+			if( customerFlag==false) 
+				break;
 		}
 	}
 }

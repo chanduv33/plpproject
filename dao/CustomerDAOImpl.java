@@ -68,5 +68,19 @@ public class CustomerDAOImpl implements CustomerDAO {
 		}
 		return null;
 	}
-
+	
+	@Override
+	public boolean checkEmailAvailability(String email) {
+		Iterator<CustomerInfoBean> itr = CollectionDbClass.customerSet.iterator();
+		while(itr.hasNext()) {
+			CustomerInfoBean bean = itr.next();
+			if(bean.getEmail().equals(email)) {
+				return false;
+			} else {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 }
