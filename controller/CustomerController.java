@@ -48,9 +48,27 @@ public class CustomerController {
 					dealer.setDealerName(sc.nextLine());
 					CustomerInfoBean customer = new CustomerInfoBean();
 					System.out.println("Enter Customer Id");
+					try {
 					customer.setCustomerId(sc.nextInt());
+					} catch (InputMismatchException e) {
+						try {
+							throw new EnterValidInputException();
+						} catch (EnterValidInputException exp) {
+							System.out.println(exp.getMessage());
+							break;
+						}
+					}
 					System.out.println("Enter Order Id");
+					try {
 					customer.setOrderId(sc.nextInt());
+					} catch (InputMismatchException e) {
+						try {
+							throw new EnterValidInputException();
+						} catch (EnterValidInputException exp) {
+							System.out.println(exp.getMessage());
+							break;
+						}
+					}
 					if(cusSer.buyProduct(dealer, customer,pname)) {
 						System.out.println("Order Placed Successfully");
 					} else {
@@ -59,7 +77,17 @@ public class CustomerController {
 					break;
 				case 2:
 					System.out.println("Enter Order Id to get Payment Details");
-					int oid = sc.nextInt();
+					int oid;
+					try {
+						oid = sc.nextInt();
+					} catch (InputMismatchException e) {
+						try {
+							throw new EnterValidInputException();
+						} catch (EnterValidInputException exp) {
+							System.out.println(exp.getMessage());
+							break;
+						}
+					}
 					CustomerInfoBean bean = cusSer.getOrderDetails(oid);
 					if(bean!=null) {
 					System.out.println(

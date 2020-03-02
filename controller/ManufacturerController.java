@@ -32,7 +32,16 @@ public class ManufacturerController {
 					sc.nextLine();
 					dealer.setDealerName(sc.nextLine());
 					System.out.println("Enter Dealer Id");
+					try {
 					dealer.setDealerId(sc.nextInt());
+					} catch (InputMismatchException e) {
+						try {
+							throw new EnterValidInputException();
+						} catch (EnterValidInputException exp) {
+							System.out.println(exp.getMessage());
+							break;
+						}
+					}
 					System.out.println("Enter Password for Dealer");
 					dealer.setPassword(sc.next());
 					if (manSer.addDealer(dealer)) {
@@ -49,7 +58,16 @@ public class ManufacturerController {
 				case 2:
 					System.out.println("Enter Product id");
 					ProductInfoBean product = new ProductInfoBean();
+					try {
 					product.setProductId(sc.nextInt());
+					} catch (InputMismatchException e) {
+						try {
+							throw new EnterValidInputException();
+						} catch (EnterValidInputException exp) {
+							System.out.println(exp.getMessage());
+							break;
+						}
+					}
 					System.out.println("Enter new Cost Price");
 					product.setCostPrice(sc.nextDouble());
 					if(manSer.setCostPrice(product)) {
@@ -60,7 +78,17 @@ public class ManufacturerController {
 					break;
 				case 3:
 					System.out.println("Enter Order Id to get Payment Details");
-					ProductInfoBean bean = manSer.getPaymentDetails(sc.nextInt());
+					ProductInfoBean bean;
+					try {
+						bean = manSer.getPaymentDetails(sc.nextInt());
+					} catch (InputMismatchException e) {
+						try {
+							throw new EnterValidInputException();
+						} catch (EnterValidInputException exp) {
+							System.out.println(exp.getMessage());
+							break;
+						}
+					}
 					if(bean!=null) {
 					System.out.println(" Order Id " + bean.getOrderId() + " \t ProductName " + bean.getProductName()
 							+ " \t Date Of Order " + bean.getDateOfOrder() + " \t Amount " + bean.getAmount()

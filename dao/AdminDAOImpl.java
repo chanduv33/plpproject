@@ -23,7 +23,7 @@ public class AdminDAOImpl implements AdminDAO{
 		while(itr.hasNext()) {
 			ManufacturerInfoBean found = itr.next();
 			if(found.getManufacturerId()==manufacturer.getManufacturerId()) {
-				found.setDescription(manufacturer.getDescription());
+				found.setPassword(manufacturer.getPassword());
 				found.setManufacturerName(manufacturer.getManufacturerName());
 				return found;
 			}

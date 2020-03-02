@@ -43,16 +43,45 @@ public class DealerController {
 				System.out.println("Enter Manufacturer Name");
 				String manName = sc.next();
 				System.out.println("Enter Quantity");
-				int quantity = sc.nextInt();
+				int quantity;
+				try {
+				quantity = sc.nextInt();
+				} catch (InputMismatchException e) {
+					try {
+						throw new EnterValidInputException();
+					} catch (EnterValidInputException exp) {
+						System.out.println(exp.getMessage());
+						break;
+					}
+				}
 				System.out.println("Enter Dealer Id");
-				int id = sc.nextInt();
+				int id;
+				try {
+				id = sc.nextInt();
+				} catch (InputMismatchException e) {
+					try {
+						throw new EnterValidInputException();
+					} catch (EnterValidInputException exp) {
+						System.out.println(exp.getMessage());
+						break;
+					}
+				}
 				Iterator<ManufacturerInfoBean> itr = CollectionDbClass.manufacturerSet.iterator();
 				while (itr.hasNext()) {
 					ManufacturerInfoBean manBean = itr.next();
 					if (manBean.getManufacturerName().equalsIgnoreCase(manName)
 							&& manBean.getProduct().getProductName().equalsIgnoreCase(productName)) {
 						System.out.println("Enter Order Id");
+						try {
 						manBean.getProduct().setOrderId(sc.nextInt());
+						} catch (InputMismatchException e) {
+							try {
+								throw new EnterValidInputException();
+							} catch (EnterValidInputException exp) {
+								System.out.println(exp.getMessage());
+								break;
+							}
+						}
 						if(dealerSer.placeOrder(manBean.getProduct(), quantity, id)) {
 							System.out.println("Order Placed successfully");
 						} else {
@@ -66,9 +95,28 @@ public class DealerController {
 				System.out.println("Enter Selling Price");
 				dealer.setSellingPrice(sc.nextDouble());
 				System.out.println("Enter Dealer Id");
+				try {
 				dealer.setDealerId(sc.nextInt());
+				} catch (InputMismatchException e) {
+					try {
+						throw new EnterValidInputException();
+					} catch (EnterValidInputException exp) {
+						System.out.println(exp.getMessage());
+						break;
+					}
+				}
 				System.out.println("Enter Product Id");
-				int pid	= sc.nextInt();
+				int pid	;
+				try {
+				pid= sc.nextInt();
+				} catch (InputMismatchException e) {
+					try {
+						throw new EnterValidInputException();
+					} catch (EnterValidInputException exp) {
+						System.out.println(exp.getMessage());
+						break;
+					}
+				}
 				if(dealerSer.setSellingPrice(dealer,pid)) {
 					System.out.println("Price has been set Successfully");
 				} else {
@@ -77,11 +125,31 @@ public class DealerController {
 				break;
 			case 3 :
 				System.out.println("Enter Product Id");
-				int oid = sc.nextInt();
+				int oid ;
+				try {
+				oid= sc.nextInt();
+				} catch (InputMismatchException e) {
+					try {
+						throw new EnterValidInputException();
+					} catch (EnterValidInputException exp) {
+						System.out.println(exp.getMessage());
+						break;
+					}
+				}
 				manSer.getPaymentDetails(oid);
 				break;
 			case 4 : System.out.println("Enter your id");
-			int did = sc.nextInt();
+			int did;
+			try {
+			did= sc.nextInt();
+			} catch (InputMismatchException e) {
+				try {
+					throw new EnterValidInputException();
+				} catch (EnterValidInputException exp) {
+					System.out.println(exp.getMessage());
+					break;
+				}
+			}
 			List<ProductInfoBean> prods = dealerSer.getAllProducts(did);
 			if(prods!=null) {
 			for (ProductInfoBean productInfoBean : prods) {
@@ -92,7 +160,17 @@ public class DealerController {
 			}
 			break;
 			case 5 : System.out.println("Enter your id");
-			 	int dealerid = sc.nextInt();
+			 	int dealerid;
+			 	try {
+			 	dealerid= sc.nextInt();
+			 	} catch (InputMismatchException e) {
+					try {
+						throw new EnterValidInputException();
+					} catch (EnterValidInputException exp) {
+						System.out.println(exp.getMessage());
+						break;
+					}
+				}
 			 	System.out.println("Enter product Name");
 			 	sc.nextLine();
 			 	String name = sc.nextLine();

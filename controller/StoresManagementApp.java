@@ -119,7 +119,17 @@ public class StoresManagementApp {
 					int ch = sc.nextInt();
 					if(ch==1) {
 						System.out.println("Enter Customer id");
-						int cid = sc.nextInt();
+						int cid ;
+						try {
+						cid = sc.nextInt();
+						} catch (InputMismatchException e) {
+							try {
+								throw new EnterValidInputException();
+							} catch (EnterValidInputException exp) {
+								System.out.println(exp.getMessage());
+								break;
+							}
+						}
 						System.out.println("Enter Email");
 						String email = sc.next();
 						System.out.println("Enter Password");
@@ -143,7 +153,17 @@ public class StoresManagementApp {
 						}
 					} else if(ch==2) {
 					System.out.println("Enter Customer id");
-					int id = sc.nextInt();
+					int id ;
+					try {
+					id = sc.nextInt();
+					} catch (InputMismatchException e) {
+						try {
+							throw new EnterValidInputException();
+						} catch (EnterValidInputException exp) {
+							System.out.println(exp.getMessage());
+							break;
+						}
+					}
 					System.out.println("Enter Password");
 					password = sc.next();
 					if(val.passwordValidtion(password)) {
@@ -179,6 +199,7 @@ public class StoresManagementApp {
 					throw new EnterValidInputException();
 				} catch (EnterValidInputException exp) {
 					System.out.println(exp.getMessage());
+					break;
 				}
 			}
 		}

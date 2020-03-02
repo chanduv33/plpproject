@@ -10,10 +10,12 @@ import com.capgemini.storesmanagementsystem.dto.ProductInfoBean;
 import com.capgemini.storesmanagementsystem.exception.EnterValidInputException;
 import com.capgemini.storesmanagementsystem.service.AdminService;
 import com.capgemini.storesmanagementsystem.service.AdminServiceImpl;
+import com.capgemini.storesmanagementsystem.validation.Validations;
 
 public class AdminController {
 	Scanner sc = new Scanner(System.in);
 	AdminService adminSer = new AdminServiceImpl();
+	Validations val = new Validations();
 	boolean adminFlag=true;
 	public void admin() {
 		System.out.println("Welcome Admin");
@@ -35,12 +37,23 @@ public class AdminController {
 					sc.nextLine();
 					manufacturer.setManufacturerName(sc.nextLine());
 					System.out.println("Enter Password for Manufacturer");
-					manufacturer.setPassword(sc.next());
+					String password = sc.next();
+					manufacturer.setPassword(password);
+					if(val.passwordValidtion(password)) {
 					System.out.println("Add Product");
 					
 					ProductInfoBean product = new ProductInfoBean();
 					System.out.println("Enter Product Id");
+					try {
 					product.setProductId(sc.nextInt());
+					} catch (InputMismatchException e) {
+						try {
+							throw new EnterValidInputException();
+						} catch (EnterValidInputException exp) {
+							System.out.println(exp.getMessage());
+							break;
+						}
+					}
 					System.out.println("Enter Product Cost");
 					double productCost = sc.nextDouble();
 					product.setCostPrice(productCost);
@@ -51,8 +64,16 @@ public class AdminController {
 					System.out.println("Enter Description about Product");
 					manufacturer.setDescription(sc.next());
 					System.out.println("Enter Manufacturer Id");
+					try {
 					manufacturer.setManufacturerId(sc.nextInt());
-
+					} catch (InputMismatchException e) {
+						try {
+							throw new EnterValidInputException();
+						} catch (EnterValidInputException exp) {
+							System.out.println(exp.getMessage());
+							break;
+						}
+					}
 					manufacturer.setProduct(product);
 					product.setManufacturer(manufacturer);
 
@@ -61,10 +82,24 @@ public class AdminController {
 					} else {
 						System.out.println("Adding Manufacturer Failed");
 					}
+					} else {
+						System.out.println("Password Must contain more than four letters");
+					}
 					break;
 				case 3:
 					System.out.println("Enter Manufacturer Id");
-					int manId = sc.nextInt();
+					
+					int manId;
+					try {
+					manId= sc.nextInt();
+					} catch (InputMismatchException e) {
+						try {
+							throw new EnterValidInputException();
+						} catch (EnterValidInputException exp) {
+							System.out.println(exp.getMessage());
+							break;
+						}
+					}
 					ManufacturerInfoBean man = adminSer.getManufacturerDetails(manId);
 					if(man!=null) {
 					System.out.println("===================================================================="
@@ -79,11 +114,20 @@ public class AdminController {
 				case 2:
 					ManufacturerInfoBean bean = new ManufacturerInfoBean();
 					System.out.println("Enter Id to Update");
+					try {
 					bean.setManufacturerId(sc.nextInt());
+					} catch (InputMismatchException e) {
+						try {
+							throw new EnterValidInputException();
+						} catch (EnterValidInputException exp) {
+							System.out.println(exp.getMessage());
+							break;
+						}
+					}
 					System.out.println("Enter New Name for Manufacturer");
 					bean.setManufacturerName(sc.next());
-					System.out.println("Enter new Description");
-					bean.setDescription(sc.next());
+					System.out.println("Enter new Password");
+					bean.setPassword(sc.next());
 					if (adminSer.updateManufacturerDetails(bean) != null) {
 						System.out.println("Updated Successfully");
 					} else {
