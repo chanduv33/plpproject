@@ -20,7 +20,15 @@ public class ProductInfoBean {
 	private LocalDate dateOfDelivery;
 	private ManufacturerInfoBean manufacturer;
 	private int quantity;
-	
+	private double sellingPrice;
+	public double getSellingPrice() {
+		return sellingPrice;
+	}
+
+	public void setSellingPrice(double sellingPrice) {
+		this.sellingPrice = sellingPrice;
+	}
+
 	public int getQuantity() {
 		return quantity;
 	}

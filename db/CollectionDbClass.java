@@ -14,5 +14,4 @@ public class CollectionDbClass {
 	public static final HashSet<DealerInfoBean> dealerSet = new HashSet<DealerInfoBean>();
 	public static final HashSet<ProductInfoBean> productSet = new HashSet<ProductInfoBean>();
 	public static final HashSet<CustomerInfoBean> customerSet = new HashSet<CustomerInfoBean>();
-	
 }

@@ -1,5 +1,7 @@
 package com.capgemini.storesmanagementsystem.service;
 
+import java.util.List;
+
 import com.capgemini.storesmanagementsystem.dao.ManufacturerDAO;
 import com.capgemini.storesmanagementsystem.dao.ManufacturerDAOImpl;
 import com.capgemini.storesmanagementsystem.dto.DealerInfoBean;
@@ -10,24 +12,34 @@ public class ManufacturerServiceImpl implements ManufacturerService{
 
 	private ManufacturerDAO dao = new ManufacturerDAOImpl();
 	
+	/*
+	 * @Override public boolean addDealer(DealerInfoBean dealer) { return
+	 * dao.addDealer(dealer); }
+	 */
+
 	@Override
-	public boolean addDealer(DealerInfoBean dealer) {
-		return dao.addDealer(dealer);
+	public boolean setCostPrice(ProductInfoBean product,ManufacturerInfoBean bean) {
+		return dao.setCostPrice(product,bean);
 	}
 
 	@Override
-	public boolean setCostPrice(ProductInfoBean product) {
-		return dao.setCostPrice(product);
-	}
-
-	@Override
-	public ProductInfoBean getPaymentDetails(int orderId) {
-		return dao.getPaymentDetails(orderId);
+	public ProductInfoBean getPaymentDetails(int orderId,String name) {
+		return dao.getPaymentDetails(orderId,name);
 	}
 
 	@Override
 	public ManufacturerInfoBean login(String name, String password) {
 		return dao.login(name, password);
+	}
+
+	@Override
+	public boolean addProduct(ManufacturerInfoBean bean) {
+		return dao.addProduct(bean);
+	}
+
+	@Override
+	public List<ProductInfoBean> getAllProducts(ManufacturerInfoBean bean) {
+		return dao.getAllProducts(bean);
 	}
 
 }

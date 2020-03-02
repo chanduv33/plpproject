@@ -13,27 +13,27 @@ import com.capgemini.storesmanagementsystem.dto.ProductInfoBean;
 public class CustomerDAOImpl implements CustomerDAO {
 
 	private DealerDAOImpl dealerImpl = new DealerDAOImpl();
+
 	@Override
-	public boolean buyProduct(DealerInfoBean dealer,CustomerInfoBean customer,String pname) {
+	public boolean buyProduct(DealerInfoBean dealer, CustomerInfoBean customer, String pname) {
 		for (CustomerInfoBean cust : CollectionDbClass.customerSet) {
-			if(customer.getCustomerId()==cust.getCustomerId()) {
+			if (customer.getCustomerId() == cust.getCustomerId()) {
 				Iterator<DealerInfoBean> itr = CollectionDbClass.dealerSet.iterator();
-				while(itr.hasNext()) {
+				while (itr.hasNext()) {
 					DealerInfoBean bean = itr.next();
-					if(bean.getDealerName().equalsIgnoreCase(dealer.getDealerName()) ){
-						//bean.getProduct().getProductName().equalsIgnoreCase(dealer.getProduct().getProductName()))
-						
-						for (ProductInfoBean  prods : bean.getProduct()) {
-							if(prods.getProductName().equals(pname)) {
+					if (bean.getDealerName().equalsIgnoreCase(dealer.getDealerName())) {
+						// bean.getProduct().getProductName().equalsIgnoreCase(dealer.getProduct().getProductName()))
+
+						for (ProductInfoBean prods : bean.getProduct()) {
+							if (prods.getProductName().equals(pname)) {
 								cust.setProduct(prods);
-								dealerImpl.checkQuantity(bean,pname);
-								LocalDate date  = LocalDate.now();
+								dealerImpl.checkQuantity(bean, pname);
+								LocalDate date = LocalDate.now();
 								cust.setDateOfOrder(date);
 								cust.setDateOfDelivery(date.plusDays(3));
 								cust.setDealer(bean);
 								cust.setOrderId(customer.getOrderId());
-								cust.setAmount(bean.getSellingPrice());
-								System.out.println(cust);
+								cust.setAmount(prods.getSellingPrice());
 								return true;
 							}
 						}
@@ -41,46 +41,49 @@ public class CustomerDAOImpl implements CustomerDAO {
 				}
 			}
 		}
-		
+
 		return false;
 	}
-	
+
 	@Override
 	public CustomerInfoBean login(int id, String password) {
 		Iterator<CustomerInfoBean> itr = CollectionDbClass.customerSet.iterator();
 		while (itr.hasNext()) {
 			CustomerInfoBean bean = itr.next();
-			if(bean.getCustomerId()==id && bean.getPassword().equals(password)) {
+			if (bean.getCustomerId() == id && bean.getPassword().equals(password)) {
 				return bean;
 			}
 		}
 		return null;
 	}
-	
+
 	@Override
 	public CustomerInfoBean getOrderDetails(int id) {
 		Iterator<CustomerInfoBean> itr = CollectionDbClass.customerSet.iterator();
-		while(itr.hasNext()) {
+		while (itr.hasNext()) {
 			CustomerInfoBean bean = itr.next();
-			if(bean.getOrderId()==id) {
+			if (bean.getOrderId() == id) {
 				return bean;
 			}
 		}
 		return null;
 	}
-	
+
 	@Override
 	public boolean checkEmailAvailability(String email) {
 		Iterator<CustomerInfoBean> itr = CollectionDbClass.customerSet.iterator();
-		while(itr.hasNext()) {
+		if(itr.hasNext()) {
+		while (itr.hasNext()) {
 			CustomerInfoBean bean = itr.next();
-			if(bean.getEmail().equals(email)) {
+			if (bean.getEmail().equals(email)) {
 				return false;
 			} else {
 				return true;
 			}
 		}
 		return false;
+	 } else {
+		return true;
 	}
-	
+	}
 }

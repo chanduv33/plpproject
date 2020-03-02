@@ -7,22 +7,21 @@ import java.util.List;
 import com.capgemini.storesmanagementsystem.db.CollectionDbClass;
 import com.capgemini.storesmanagementsystem.dto.ManufacturerInfoBean;
 
-public class AdminDAOImpl implements AdminDAO{
+public class AdminDAOImpl implements AdminDAO {
 
 	@Override
 	public boolean addManufacturer(ManufacturerInfoBean manufacturer) {
-		  CollectionDbClass.productSet.add(manufacturer.getProduct());
-		  CollectionDbClass.manufacturerSet.add(manufacturer);
-		  return true;
+		CollectionDbClass.manufacturerSet.add(manufacturer);
+		return true;
 	}
 
 	@Override
 	public ManufacturerInfoBean updateManufacturerDetails(ManufacturerInfoBean manufacturer) {
-		 
-		Iterator<ManufacturerInfoBean> itr =  CollectionDbClass.manufacturerSet.iterator();
-		while(itr.hasNext()) {
+
+		Iterator<ManufacturerInfoBean> itr = CollectionDbClass.manufacturerSet.iterator();
+		while (itr.hasNext()) {
 			ManufacturerInfoBean found = itr.next();
-			if(found.getManufacturerId()==manufacturer.getManufacturerId()) {
+			if (found.getManufacturerId() == manufacturer.getManufacturerId()) {
 				found.setPassword(manufacturer.getPassword());
 				found.setManufacturerName(manufacturer.getManufacturerName());
 				return found;
@@ -34,10 +33,9 @@ public class AdminDAOImpl implements AdminDAO{
 	@Override
 	public ManufacturerInfoBean getManufacturerDetails(int id) {
 		for (ManufacturerInfoBean man : CollectionDbClass.manufacturerSet) {
-			if(man.getManufacturerId()==id) {
-				System.out.println(man);
+			if (man.getManufacturerId() == id) {
 				return man;
-			} 
+			}
 		}
 		return null;
 	}

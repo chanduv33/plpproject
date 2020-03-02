@@ -9,7 +9,6 @@ import lombok.ToString.Exclude;
 public class DealerInfoBean {
 	private String dealerName;
 	private ManufacturerInfoBean manufacturer;
-	private double sellingPrice;
 	private final int minimumQuantity = 10;
 	private List<ProductInfoBean> product = new ArrayList<ProductInfoBean>();
 	private int dealerId;
@@ -34,12 +33,7 @@ public class DealerInfoBean {
 	public void setManufacturer(ManufacturerInfoBean manufacturer) {
 		this.manufacturer = manufacturer;
 	}
-	public double getSellingPrice() {
-		return sellingPrice;
-	}
-	public void setSellingPrice(double sellingPrice) {
-		this.sellingPrice = sellingPrice;
-	}
+	
 	public List<ProductInfoBean> getProduct() {
 		return product;
 	}
@@ -55,11 +49,6 @@ public class DealerInfoBean {
 	public int getMinimumQuantity() {
 		return minimumQuantity;
 	}
-	@Override
-	public String toString() {
-		return "DealerInfoBean [dealerName=" + dealerName + ", manufacturer=" + manufacturer + ", sellingPrice="
-				+ sellingPrice +", minimumQuantity=" + minimumQuantity + ", product="
-				+ product + ", dealerId=" + dealerId + "]";
-	}
+	
 	
 }

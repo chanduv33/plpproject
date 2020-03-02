@@ -71,12 +71,7 @@ public class CustomerInfoBean {
 	public void setAmount(double amount) {
 		this.amount = amount;
 	}
-	@Override
-	public String toString() {
-		return "CustomerInfoBean [customerId=" + customerId + ", orderId=" + orderId + ", dealer=" + dealer
-				+ ", product=" + product + ", dateOfOrder=" + dateOfOrder + ", dateOfDelivery=" + dateOfDelivery
-				+ ", amount=" + amount + "]";
-	}
+	
 	
 	
 }

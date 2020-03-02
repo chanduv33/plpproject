@@ -17,7 +17,8 @@ import com.capgemini.storesmanagementsystem.service.CustomerServiceImpl;
 public class CustomerController {
 	CustomerService cusSer = new CustomerServiceImpl();
 	Scanner sc = new Scanner(System.in);
-	boolean customerFlag=true;
+	boolean customerFlag = true;
+
 	public void customer() {
 		while (customerFlag) {
 			System.out.println("Welcome Customer");
@@ -37,7 +38,8 @@ public class CustomerController {
 					while (itr.hasNext()) {
 						DealerInfoBean bean = itr.next();
 						for (ProductInfoBean product : bean.getProduct()) {
-							System.out.println("Dealer Name : "+bean.getDealerName()+" \t Product Name : "+product.getProductName());
+							System.out.println("Dealer Name : " + bean.getDealerName() + " \t Product Name : "
+									+ product.getProductName());
 						}
 					}
 					System.out.println("Enter Product You Want to Buy");
@@ -49,7 +51,7 @@ public class CustomerController {
 					CustomerInfoBean customer = new CustomerInfoBean();
 					System.out.println("Enter Customer Id");
 					try {
-					customer.setCustomerId(sc.nextInt());
+						customer.setCustomerId(sc.nextInt());
 					} catch (InputMismatchException e) {
 						try {
 							throw new EnterValidInputException();
@@ -60,7 +62,7 @@ public class CustomerController {
 					}
 					System.out.println("Enter Order Id");
 					try {
-					customer.setOrderId(sc.nextInt());
+						customer.setOrderId(sc.nextInt());
 					} catch (InputMismatchException e) {
 						try {
 							throw new EnterValidInputException();
@@ -69,7 +71,7 @@ public class CustomerController {
 							break;
 						}
 					}
-					if(cusSer.buyProduct(dealer, customer,pname)) {
+					if (cusSer.buyProduct(dealer, customer, pname)) {
 						System.out.println("Order Placed Successfully");
 					} else {
 						System.out.println("Order Placement has been failed");
@@ -89,15 +91,16 @@ public class CustomerController {
 						}
 					}
 					CustomerInfoBean bean = cusSer.getOrderDetails(oid);
-					if(bean!=null) {
-					System.out.println(
-							" Order Id " + bean.getOrderId() + " \t ProductName " + bean.getProduct().getProductName()
-									+ " \t Date Of Order " + bean.getDateOfOrder() + " \t Amount " + bean.getAmount());
+					if (bean != null) {
+						System.out.println(" Order Id " + bean.getOrderId() + " \t ProductName "
+								+ bean.getProduct().getProductName() + " \t Date Of Order " + bean.getDateOfOrder()
+								+ " \t Amount " + bean.getAmount());
 					} else {
 						System.out.println("Order not found");
 					}
 					break;
-				case 3: customerFlag=false;
+				case 3:
+					customerFlag = false;
 					break;
 				}
 			} catch (InputMismatchException e) {
@@ -107,7 +110,7 @@ public class CustomerController {
 					System.out.println(exp.getMessage());
 				}
 			}
-			if( customerFlag==false) 
+			if (customerFlag == false)
 				break;
 		}
 	}

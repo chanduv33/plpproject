@@ -16,4 +16,10 @@ public class Validations {
 		Matcher matcher = pattern.matcher(password);
 		return matcher.matches();
 	}
+	public boolean nameValidation(String name) {
+		String regExp = "^[a-zA-Z]{4,50}";
+		Pattern pattern = Pattern.compile(regExp);
+		Matcher matcher = pattern.matcher(name);
+		return matcher.matches();
+	}
 }
