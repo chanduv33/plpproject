@@ -6,7 +6,7 @@ public class EnterValidInputException extends RuntimeException{
 	
 	String message;
 	public EnterValidInputException() {
-		this.message=" Exception Occurred - Enter Valid Input \n Please Check Input and enter again.... ";
+		this.message=" Enter Valid Input - Please Check Input and enter again.... ";
 	}
 	
 	@Override

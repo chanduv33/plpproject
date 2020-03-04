@@ -8,13 +8,18 @@ import java.util.Scanner;
 import com.capgemini.storesmanagementsystem.dto.ManufacturerInfoBean;
 import com.capgemini.storesmanagementsystem.dto.ProductInfoBean;
 import com.capgemini.storesmanagementsystem.exception.EnterValidInputException;
+import com.capgemini.storesmanagementsystem.exception.IdAlreadyExistsException;
+import com.capgemini.storesmanagementsystem.exception.NameAlreadyExistsException;
 import com.capgemini.storesmanagementsystem.service.AdminService;
 import com.capgemini.storesmanagementsystem.service.AdminServiceImpl;
+import com.capgemini.storesmanagementsystem.service.ManufacturerService;
+import com.capgemini.storesmanagementsystem.service.ManufacturerServiceImpl;
 import com.capgemini.storesmanagementsystem.validation.Validations;
 
 public class AdminController {
 	Scanner sc = new Scanner(System.in);
 	AdminService adminSer = new AdminServiceImpl();
+	ManufacturerService manSer = new ManufacturerServiceImpl();
 	Validations val = new Validations();
 	boolean adminFlag = true;
 
@@ -36,6 +41,7 @@ public class AdminController {
 					System.out.println("Enter Manufacturer Name");
 					sc.nextLine();
 					String name = sc.nextLine();
+					if(manSer.checkNameAvailability(name)) {
 					if (val.nameValidation(name)) {
 						manufacturer.setManufacturerName(name);
 						System.out.println("Enter Password for Manufacturer");
@@ -44,17 +50,34 @@ public class AdminController {
 						if (val.passwordValidtion(password)) {
 							System.out.println("Enter Manufacturer Id");
 							int manId=sc.nextInt();
+							if(manSer.checkIdAvailability(manId)) {
 							manufacturer.setManufacturerId(manId);
 							if (adminSer.addManufacturer(manufacturer)) {
 								System.out.println("Manufacturer Added Successfully");
 							} else {
 								System.out.println("Adding Manufacturer Failed");
 							}
+							} else {
+								try {
+									throw new IdAlreadyExistsException();
+								} catch(IdAlreadyExistsException exp) {
+									System.err.println(exp.getMessage());
+									break;
+								}
+							}
 						} else {
 							System.out.println("Password Must contain more than four letters");
 						}
 					} else {
 						System.out.println("Please enter valid Name");
+					}
+					} else {
+						try {
+							throw new NameAlreadyExistsException();
+						} catch (NameAlreadyExistsException e) {
+							System.err.println(e.getMessage());
+							break;
+						}
 					}
 					break;
 				case 3:
@@ -67,7 +90,7 @@ public class AdminController {
 						try {
 							throw new EnterValidInputException();
 						} catch (EnterValidInputException exp) {
-							System.out.println(exp.getMessage());
+							System.err.println(exp.getMessage());
 							break;
 						}
 					}
@@ -89,13 +112,14 @@ public class AdminController {
 						try {
 							throw new EnterValidInputException();
 						} catch (EnterValidInputException exp) {
-							System.out.println(exp.getMessage());
+							System.err.println(exp.getMessage());
 							break;
 						}
 					}
 					System.out.println("Enter New Name for Manufacturer");
 					sc.nextLine();
 					String newName = sc.nextLine();
+					if(manSer.checkNameAvailability(newName)) {
 					if (val.nameValidation(newName)) {
 						bean.setManufacturerName(newName);
 						System.out.println("Enter new Password");
@@ -108,6 +132,13 @@ public class AdminController {
 					} else {
 						System.out.println("Enter valid name");
 					}
+					} else {
+						try {
+							throw new NameAlreadyExistsException();
+						} catch (NameAlreadyExistsException e) {
+							System.err.println(e.getMessage());
+						}
+					}
 					break;
 				case 4:
 					System.out.println("===================================================================="
@@ -118,7 +149,7 @@ public class AdminController {
 						while (itr.hasNext()) {
 							ManufacturerInfoBean mans = itr.next();
 							System.out.println(" ManufacturerName = " + mans.getManufacturerName() 
-									+ " \n MId = " + mans.getManufacturerId());
+									+ " \t MId = " + mans.getManufacturerId());
 						}
 						System.out.println("===================================================================="
 								+ "==========================================================");
@@ -134,7 +165,8 @@ public class AdminController {
 				try {
 					throw new EnterValidInputException();
 				} catch (EnterValidInputException exp) {
-					System.out.println(exp.getMessage());
+					System.err.println(exp.getMessage());
+					StoresManagementApp.start();
 				}
 
 			}

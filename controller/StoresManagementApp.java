@@ -20,6 +20,8 @@ import com.capgemini.storesmanagementsystem.dto.ManufacturerInfoBean;
 import com.capgemini.storesmanagementsystem.dto.ProductInfoBean;
 import com.capgemini.storesmanagementsystem.exception.EmailAlreadyExistsException;
 import com.capgemini.storesmanagementsystem.exception.EnterValidInputException;
+import com.capgemini.storesmanagementsystem.exception.IdAlreadyExistsException;
+import com.capgemini.storesmanagementsystem.exception.NameAlreadyExistsException;
 import com.capgemini.storesmanagementsystem.service.AdminService;
 import com.capgemini.storesmanagementsystem.service.AdminServiceImpl;
 import com.capgemini.storesmanagementsystem.service.CustomerService;
@@ -32,7 +34,7 @@ import com.capgemini.storesmanagementsystem.validation.Validations;
 
 public class StoresManagementApp {
 	public static void start() {
-		
+
 		Scanner sc = new Scanner(System.in);
 		AdminService adminSer = new AdminServiceImpl();
 		DealerService dealerSer = new DealerServiceImpl();
@@ -96,33 +98,51 @@ public class StoresManagementApp {
 							System.out.println("Enter Name");
 							sc.nextLine();
 							String dealerName = sc.nextLine();
-							if (val.nameValidation(dealerName)) {
-								dealer.setDealerName(dealerName);
-								System.out.println("Enter Dealer Id");
-								try {
-									dealer.setDealerId(sc.nextInt());
-								} catch (InputMismatchException e) {
+							if (dealerSer.checkNameAvailability(dealerName)) {
+								if (val.nameValidation(dealerName)) {
+									dealer.setDealerName(dealerName);
+									System.out.println("Enter Dealer Id");
 									try {
-										throw new EnterValidInputException();
-									} catch (EnterValidInputException exp) {
-										System.out.println(exp.getMessage());
-										break;
+										int did = sc.nextInt();
+										if (dealerSer.checkIdAvailability(did)) {
+											dealer.setDealerId(did);
+										} else {
+											try {
+												throw new IdAlreadyExistsException();
+											} catch (IdAlreadyExistsException exp) {
+												System.err.println(exp.getMessage());
+												break;
+											}
+										}
+									} catch (InputMismatchException e) {
+										try {
+											throw new EnterValidInputException();
+										} catch (EnterValidInputException exp) {
+											System.out.println(exp.getMessage());
+											break;
+										}
 									}
-								}
-								System.out.println("Enter Password for Dealer");
-								String dpassword = sc.next();
-								if (val.passwordValidtion(dpassword)) {
-									dealer.setPassword(dpassword);
-									if (dealerSer.register(dealer)) {
-										System.out.println("Dealer Registered Successfully");
+									System.out.println("Enter Password for Dealer");
+									String dpassword = sc.next();
+									if (val.passwordValidtion(dpassword)) {
+										dealer.setPassword(dpassword);
+										if (dealerSer.register(dealer)) {
+											System.out.println("Dealer Registered Successfully");
+										} else {
+											System.out.println("Registration has been failed");
+										}
 									} else {
-										System.out.println("Registration has been failed");
+										System.out.println("Password must be greater than four letters");
 									}
 								} else {
-									System.out.println("Password must be greater than four letters");
+									System.out.println("Enter Valid Name");
 								}
 							} else {
-								System.out.println("Enter Valid Name");
+								try {
+									throw new NameAlreadyExistsException();
+								} catch (NameAlreadyExistsException e) {
+									System.err.println(e.getMessage());
+								}
 							}
 						} else if (ch == 2) {
 							System.out.println("Enter UserName");
@@ -163,33 +183,46 @@ public class StoresManagementApp {
 							int cid;
 							try {
 								cid = sc.nextInt();
+								if (cusSer.checkIdAvailability(cid)) {
+
+									System.out.println("Enter Email");
+									String email = sc.next();
+									System.out.println("Enter Password");
+									String pwd = sc.next();
+									if (cusSer.checkEmailAvailability(email)) {
+										if (val.emailValidation(email)) {
+											if (val.passwordValidtion(pwd)) {
+												CustomerInfoBean bean = new CustomerInfoBean();
+												bean.setCustomerId(cid);
+												bean.setPassword(pwd);
+												bean.setEmail(email);
+												CollectionDbClass.customerSet.add(bean);
+											} else {
+												System.err.println("Password Must contains more than 4 letters");
+											}
+										} else {
+											System.err.println("Please Enter Valid Email");
+										}
+									} else {
+										try {
+											throw new EmailAlreadyExistsException();
+										} catch (EmailAlreadyExistsException e) {
+											System.err.println(e.getMessage());
+										}
+									}
+								} else {
+									try {
+										throw new IdAlreadyExistsException();
+									} catch (IdAlreadyExistsException exp) {
+										System.err.println(exp.getMessage());
+									}
+								}
 							} catch (InputMismatchException e) {
 								try {
 									throw new EnterValidInputException();
 								} catch (EnterValidInputException exp) {
 									System.out.println(exp.getMessage());
 									break;
-								}
-							}
-							System.out.println("Enter Email");
-							String email = sc.next();
-							System.out.println("Enter Password");
-							String pwd = sc.next();
-							if (cusSer.checkEmailAvailability(email)) {
-								if (val.passwordValidtion(pwd) && val.emailValidation(email)) {
-									CustomerInfoBean bean = new CustomerInfoBean();
-									bean.setCustomerId(cid);
-									bean.setPassword(pwd);
-									bean.setEmail(email);
-									CollectionDbClass.customerSet.add(bean);
-								} else {
-									System.out.println("Password Must contains more than 4 letters");
-								}
-							} else {
-								try {
-									throw new EmailAlreadyExistsException();
-								} catch (EmailAlreadyExistsException e) {
-									System.out.println(e.getMessage());
 								}
 							}
 						} else if (ch == 2) {
@@ -212,12 +245,12 @@ public class StoresManagementApp {
 								if (customer != null) {
 									System.out.println("Csutomer Login Successful");
 									CustomerController controller = new CustomerController();
-									controller.customer();
+									controller.customer(customer);
 								} else {
 									System.out.println("Customer Doesnt exists");
 								}
 							} else {
-								System.out.println("Password Must contains more than 4 letters");
+								System.err.println("Password Must contains more than 4 letters");
 							}
 						} else {
 							System.out.println("Enter valid choice");
@@ -226,7 +259,7 @@ public class StoresManagementApp {
 						try {
 							throw new EnterValidInputException();
 						} catch (EnterValidInputException exp) {
-							System.out.println(exp.getMessage());
+							System.err.println(exp.getMessage());
 						}
 					}
 					break;
@@ -239,7 +272,7 @@ public class StoresManagementApp {
 				try {
 					throw new EnterValidInputException();
 				} catch (EnterValidInputException exp) {
-					System.out.println(exp.getMessage());
+					System.err.println(exp.getMessage());
 					start();
 				}
 			}

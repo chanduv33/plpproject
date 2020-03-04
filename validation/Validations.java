@@ -22,4 +22,11 @@ public class Validations {
 		Matcher matcher = pattern.matcher(name);
 		return matcher.matches();
 	}
+	
+	public boolean dateValidation(String date) {
+		String regExp = "^[0-9]{4}[-/](1[0-2]|0[1-9])[-/](3[01]|[12][0-9]|0[1-9])$";
+		Pattern pattern = Pattern.compile(regExp);
+		Matcher matcher = pattern.matcher(date);
+		return matcher.matches();
+	}
 }

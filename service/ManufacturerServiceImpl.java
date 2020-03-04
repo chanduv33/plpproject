@@ -6,6 +6,7 @@ import com.capgemini.storesmanagementsystem.dao.ManufacturerDAO;
 import com.capgemini.storesmanagementsystem.dao.ManufacturerDAOImpl;
 import com.capgemini.storesmanagementsystem.dto.DealerInfoBean;
 import com.capgemini.storesmanagementsystem.dto.ManufacturerInfoBean;
+import com.capgemini.storesmanagementsystem.dto.OrderDetails;
 import com.capgemini.storesmanagementsystem.dto.ProductInfoBean;
 
 public class ManufacturerServiceImpl implements ManufacturerService{
@@ -23,7 +24,7 @@ public class ManufacturerServiceImpl implements ManufacturerService{
 	}
 
 	@Override
-	public ProductInfoBean getPaymentDetails(int orderId,String name) {
+	public OrderDetails getPaymentDetails(int orderId,String name) {
 		return dao.getPaymentDetails(orderId,name);
 	}
 
@@ -40,6 +41,22 @@ public class ManufacturerServiceImpl implements ManufacturerService{
 	@Override
 	public List<ProductInfoBean> getAllProducts(ManufacturerInfoBean bean) {
 		return dao.getAllProducts(bean);
+	}
+
+	@Override
+	public boolean checkIdAvailability(int id) {
+		return dao.checkIdAvailability(id);
+	}
+
+	@Override
+	public boolean checkNameAvailability(String name) {
+		return dao.checkNameAvailability(name);
+	}
+
+	@Override
+	public boolean checkProductAvailability(int id, ManufacturerInfoBean bean) {
+		// TODO Auto-generated method stub
+		return dao.checkProductAvailability(id, bean);
 	}
 
 }

@@ -6,6 +6,7 @@ import com.capgemini.storesmanagementsystem.dao.DealerDAO;
 import com.capgemini.storesmanagementsystem.dao.DealerDAOImpl;
 import com.capgemini.storesmanagementsystem.dto.DealerInfoBean;
 import com.capgemini.storesmanagementsystem.dto.ManufacturerInfoBean;
+import com.capgemini.storesmanagementsystem.dto.OrderDetails;
 import com.capgemini.storesmanagementsystem.dto.ProductInfoBean;
 
 public class DealerServiceImpl implements DealerService{
@@ -13,8 +14,8 @@ public class DealerServiceImpl implements DealerService{
 	private DealerDAO dao = new DealerDAOImpl();
 
 	@Override
-	public boolean placeOrder(ProductInfoBean product, DealerInfoBean dealer,ManufacturerInfoBean manufacturer) {
-		return dao.placeOrder(product, dealer,manufacturer);
+	public boolean placeOrder(OrderDetails order, DealerInfoBean dealer) {
+		return dao.placeOrder(order, dealer);
 	}
 
 	@Override
@@ -23,13 +24,8 @@ public class DealerServiceImpl implements DealerService{
 	}
 
 	@Override
-	public List<ProductInfoBean> getAllProducts(int id) {
-		return dao.getAllProducts(id);
-	}
-
-	@Override
-	public int getNumberOfProducts(String name, int id) {
-		return dao.getNumberOfProducts(name, id);
+	public int getNumberOfProducts(String name, DealerInfoBean dealer) {
+		return dao.getNumberOfProducts(name, dealer);
 	}
 
 	@Override
@@ -43,7 +39,22 @@ public class DealerServiceImpl implements DealerService{
 	}
 
 	@Override
-	public ProductInfoBean getPaymentDeatils(int oid,DealerInfoBean dealer) {
+	public OrderDetails getPaymentDeatils(int oid,DealerInfoBean dealer) {
 		return dao.getPaymentDeatils(oid,dealer);
+	}
+
+	@Override
+	public boolean checkIdAvailability(int id) {
+		return dao.checkIdAvailability(id);
+	}
+
+	@Override
+	public boolean checkNameAvailability(String name) {
+		return dao.checkNameAvailability(name);
+	}
+
+	@Override
+	public boolean setDeliveredDate(String date,int id,DealerInfoBean dealer) {
+		return dao.setDeliveredDate(date,id,dealer);
 	}
 }

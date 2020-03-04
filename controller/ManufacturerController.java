@@ -6,14 +6,19 @@ import java.util.Scanner;
 
 import com.capgemini.storesmanagementsystem.dto.DealerInfoBean;
 import com.capgemini.storesmanagementsystem.dto.ManufacturerInfoBean;
+import com.capgemini.storesmanagementsystem.dto.OrderDetails;
 import com.capgemini.storesmanagementsystem.dto.ProductInfoBean;
 import com.capgemini.storesmanagementsystem.exception.EnterValidInputException;
+import com.capgemini.storesmanagementsystem.exception.IdAlreadyExistsException;
+import com.capgemini.storesmanagementsystem.service.DealerService;
+import com.capgemini.storesmanagementsystem.service.DealerServiceImpl;
 import com.capgemini.storesmanagementsystem.service.ManufacturerService;
 import com.capgemini.storesmanagementsystem.service.ManufacturerServiceImpl;
 import com.capgemini.storesmanagementsystem.validation.Validations;
 
 public class ManufacturerController {
 	ManufacturerService manSer = new ManufacturerServiceImpl();
+	DealerService dealerSer = new DealerServiceImpl();
 	Scanner sc = new Scanner(System.in);
 	Validations val = new Validations();
 	boolean manufacturerFlag = true;
@@ -22,7 +27,7 @@ public class ManufacturerController {
 		while (true) {
 			System.out.println("Welcome Manufacturer");
 			System.out.println("Operation you would like to perform ?");
-			System.out.println(" 1.Add Product \n 2. Set CostPrice \n"
+			System.out.println(" 1. Add Product \n 2. Set CostPrice \n"
 					+ " 3. Get Payment Details \n 4. Get All Products \n " + "5. Exit as Manufacturer");
 			System.out.println("Enter Your Choice");
 			System.out.println("===================================================================="
@@ -34,13 +39,24 @@ public class ManufacturerController {
 					System.out.println("Add Product");
 					ProductInfoBean product = new ProductInfoBean();
 					System.out.println("Enter Product Id");
+					int pid;
 					try {
-						product.setProductId(sc.nextInt());
+						pid = sc.nextInt();
+						if(manSer.checkProductAvailability(pid, manufacturer))
+						product.setProductId(pid);
+						else {
+							try {
+								throw new IdAlreadyExistsException();
+							} catch(IdAlreadyExistsException exp) {
+								System.err.println(exp.getMessage());
+								break;
+							}
+						}
 					} catch (InputMismatchException e) {
 						try {
 							throw new EnterValidInputException();
 						} catch (EnterValidInputException exp) {
-							System.out.println(exp.getMessage());
+							System.err.println(exp.getMessage());
 							break;
 						}
 					}
@@ -64,7 +80,7 @@ public class ManufacturerController {
 						try {
 							throw new EnterValidInputException();
 						} catch (EnterValidInputException exp) {
-							System.out.println(exp.getMessage());
+							System.err.println(exp.getMessage());
 							break;
 						}
 					}
@@ -85,14 +101,14 @@ public class ManufacturerController {
 						try {
 							throw new EnterValidInputException();
 						} catch (EnterValidInputException exp) {
-							System.out.println(exp.getMessage());
+							System.err.println(exp.getMessage());
 							break;
 						}
 					}
 					System.out.println("Enter Dealer name");
 					sc.nextLine();
 					String dname = sc.nextLine();
-					ProductInfoBean bean = bean = manSer.getPaymentDetails(oid, dname);
+					OrderDetails bean = bean = manSer.getPaymentDetails(oid, dname);
 
 					if (bean != null) {
 						System.out.println(" Order Id " + bean.getOrderId() + " \t ProductName " + bean.getProductName()
@@ -116,7 +132,8 @@ public class ManufacturerController {
 				try {
 					throw new EnterValidInputException();
 				} catch (EnterValidInputException exp) {
-					System.out.println(exp.getMessage());
+					System.err.println(exp.getMessage());
+					StoresManagementApp.start();
 				}
 			}
 			if (manufacturerFlag == false)

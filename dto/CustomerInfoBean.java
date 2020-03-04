@@ -2,20 +2,25 @@ package com.capgemini.storesmanagementsystem.dto;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 import lombok.Data;
 
 
 public class CustomerInfoBean {
 	private int customerId;
-	private int orderId;
-	private DealerInfoBean dealer;
-	private ProductInfoBean product;
-	private LocalDate dateOfOrder;
-	private LocalDate dateOfDelivery;
-	private double amount;
 	private String password;
 	private String email;
+	
+	private List<OrderDetails> orders = new LinkedList<OrderDetails>();
+	
+	public List<OrderDetails> getOrders() {
+		return orders;
+	}
+	public void setOrders(List<OrderDetails> orders) {
+		this.orders = orders;
+	}
 	public String getEmail() {
 		return email;
 	}
@@ -35,43 +40,4 @@ public class CustomerInfoBean {
 	public void setCustomerId(int customerId) {
 		this.customerId = customerId;
 	}
-	public int getOrderId() {
-		return orderId;
-	}
-	public void setOrderId(int orderId) {
-		this.orderId = orderId;
-	}
-	public DealerInfoBean getDealer() {
-		return dealer;
-	}
-	public void setDealer(DealerInfoBean dealer) {
-		this.dealer = dealer;
-	}
-	public ProductInfoBean getProduct() {
-		return product;
-	}
-	public void setProduct(ProductInfoBean product) {
-		this.product = product;
-	}
-	public LocalDate getDateOfOrder() {
-		return dateOfOrder;
-	}
-	public void setDateOfOrder(LocalDate dateOfOrder) {
-		this.dateOfOrder = dateOfOrder;
-	}
-	public LocalDate getDateOfDelivery() {
-		return dateOfDelivery;
-	}
-	public void setDateOfDelivery(LocalDate dateOfDelivery) {
-		this.dateOfDelivery = dateOfDelivery;
-	}
-	public double getAmount() {
-		return amount;
-	}
-	public void setAmount(double amount) {
-		this.amount = amount;
-	}
-	
-	
-	
 }

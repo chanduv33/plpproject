@@ -6,6 +6,7 @@ import java.util.List;
 import com.capgemini.storesmanagementsystem.db.CollectionDbClass;
 import com.capgemini.storesmanagementsystem.dto.DealerInfoBean;
 import com.capgemini.storesmanagementsystem.dto.ManufacturerInfoBean;
+import com.capgemini.storesmanagementsystem.dto.OrderDetails;
 import com.capgemini.storesmanagementsystem.dto.ProductInfoBean;
 import com.capgemini.storesmanagementsystem.service.DealerService;
 import com.capgemini.storesmanagementsystem.service.DealerServiceImpl;
@@ -32,18 +33,20 @@ public class ManufacturerDAOImpl implements ManufacturerDAO {
 
 	@Override
 	public boolean setCostPrice(ProductInfoBean product,ManufacturerInfoBean bean) {
+		
 		Iterator<ProductInfoBean> itr = bean.getProduct().iterator();
 		while(itr.hasNext()) {
 			ProductInfoBean prod = itr.next();
 			if(prod.getProductId()==product.getProductId()) {
 				prod.setCostPrice(product.getCostPrice());
+				return true;
 			}
 		}
 		return false;
 	}
 
 	@Override
-	public ProductInfoBean getPaymentDetails(int orderId,String name) {
+	public OrderDetails getPaymentDetails(int orderId,String name) {
 		for (DealerInfoBean dealer : CollectionDbClass.dealerSet) {
 			if(dealer.getDealerName().equalsIgnoreCase(name)) {
 				return dealerSer.getPaymentDeatils(orderId, dealer);
@@ -66,6 +69,60 @@ public class ManufacturerDAOImpl implements ManufacturerDAO {
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public boolean checkIdAvailability(int id) {
+		Iterator<ManufacturerInfoBean> itr = CollectionDbClass.manufacturerSet.iterator();
+		if(itr.hasNext()) {
+		while (itr.hasNext()) {
+			ManufacturerInfoBean bean = itr.next();
+			if (bean.getManufacturerId()==id) {
+				return false;
+			} else {
+				return true;
+			}
+		}
+		return false;
+	 } else {
+		return true;
+	}
+	}
+	
+	@Override
+	public boolean checkNameAvailability(String name) {
+		Iterator<ManufacturerInfoBean> itr = CollectionDbClass.manufacturerSet.iterator();
+		if(itr.hasNext()) {
+		while (itr.hasNext()) {
+			ManufacturerInfoBean bean = itr.next();
+			if (bean.getManufacturerName().equalsIgnoreCase(name)) {
+				return false;
+			} else {
+				return true;
+			}
+		}
+		return false;
+	 } else {
+		return true;
+	}
+	}
+
+	@Override
+	public boolean checkProductAvailability(int id,ManufacturerInfoBean bean) {
+		Iterator<ProductInfoBean> itr = bean.getProduct().iterator();
+		if(itr.hasNext()) {
+		while (itr.hasNext()) {
+			ProductInfoBean prod = itr.next();
+			if (prod.getProductId()==id) {
+				return false;
+			} else {
+				return true;
+			}
+		}
+		return false;
+	 } else {
+		return true;
+	}
 	}
 
 }

@@ -2,33 +2,29 @@ package com.capgemini.storesmanagementsystem.dao;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
 import com.capgemini.storesmanagementsystem.db.CollectionDbClass;
+import com.capgemini.storesmanagementsystem.dto.CustomerInfoBean;
 import com.capgemini.storesmanagementsystem.dto.DealerInfoBean;
 import com.capgemini.storesmanagementsystem.dto.ManufacturerInfoBean;
+import com.capgemini.storesmanagementsystem.dto.OrderDetails;
 import com.capgemini.storesmanagementsystem.dto.ProductInfoBean;
 
 public class DealerDAOImpl implements DealerDAO {
 
 	@Override
-	public boolean placeOrder(ProductInfoBean product, DealerInfoBean bean,ManufacturerInfoBean manufacturer) {
-				ProductInfoBean prod = new ProductInfoBean();
-				prod.setProductName(product.getProductName());
-				prod.setOrderId(product.getOrderId());
-				prod.setQuantity(product.getQuantity());
+	public boolean placeOrder(OrderDetails order, DealerInfoBean bean) {
 				LocalDate date = LocalDate.now();
-				prod.setDateOfOrder(date);
-				prod.setDateOfDelivery(LocalDate.now().plusDays(2));
-				prod.setDealer(bean);
-				prod.setManufacturer(product.getManufacturer());
-				prod.setSellingPrice(product.getCostPrice() + 50);
-				bean.getProduct().add(prod);
-				prod.setAmount(product.getQuantity() * product.getCostPrice());
-				
+				order.setDateOfOrder(date);
+				order.setStatus("Not yet Delivered");
+				order.setDateOfDelivery(date.plusDays(2));
+				order.getDealers().add(bean);
+				bean.getOrders().add(order);
 				return true;
 	}
 
@@ -46,61 +42,21 @@ public class DealerDAOImpl implements DealerDAO {
 
 	@Override
 	public boolean setSellingPrice(DealerInfoBean dealer, int id,double price) {
-		Iterator<DealerInfoBean> itr = CollectionDbClass.dealerSet.iterator();
-		while (itr.hasNext()) {
-			DealerInfoBean bean = itr.next();
-			if (bean.getDealerName().equals(dealer.getDealerName())) {
-				for (ProductInfoBean prod : bean.getProduct()) {
-					if (prod != null) {
-						if (prod.getProductId() == id) {
-							prod.setSellingPrice(price);
-							return true;
-						}
-					} else {
-						return false;
-					}
-				}
+		for (ProductInfoBean prod : dealer.getProduct()) {
+			if(prod.getProductId()==id) {
+				prod.setSellingPrice(price);
+				return true;
 			}
 		}
 		return false;
 	}
-
-	public void checkQuantity(DealerInfoBean dealer, String name) {
-
-		for (ProductInfoBean prods : dealer.getProduct()) {
-
-			if (prods.getProductName().equals(name)) {
-				int quantity = prods.getQuantity() - 1;
-				prods.setQuantity(quantity);
-				if (prods.getQuantity() <= dealer.getMinimumQuantity()) {
-					prods.setQuantity(prods.getQuantity() * 2);
-					// autoBuyStocks(prods, prods.getQuantity() * 2);
-				}
-			}
-		}
-	}
-
-	/*
-	 * public void autoBuyStocks(ProductInfoBean product, int quantity) { int newOid
-	 * = product.getOrderId() + 1; placeOrder(product, quantity, newOid); }
-	 */
+	 
 
 	@Override
-	public List<ProductInfoBean> getAllProducts(int id) {
-		for (DealerInfoBean dealer : CollectionDbClass.dealerSet) {
-			if (dealer.getDealerId() == id)
-				return dealer.getProduct();
-			else
-				return null;
-		}
-		return null;
-	}
-
-	@Override
-	public int getNumberOfProducts(String name, int id) {
-		for (DealerInfoBean dealer : CollectionDbClass.dealerSet) {
-			if (dealer.getDealerId() == id) {
-				for (ProductInfoBean prod : dealer.getProduct()) {
+	public int getNumberOfProducts(String name, DealerInfoBean dealer) {
+		for (DealerInfoBean bean : CollectionDbClass.dealerSet) {
+			if (dealer.getDealerName().equalsIgnoreCase(bean.getDealerName())) {
+				for (ProductInfoBean prod : bean.getProduct()) {
 					if (prod.getProductName().equals(name))
 						return prod.getQuantity();
 				}
@@ -116,15 +72,74 @@ public class DealerDAOImpl implements DealerDAO {
 	}
 
 	@Override
-	public ProductInfoBean getPaymentDeatils(int oid,DealerInfoBean dealer) {
-		for (ProductInfoBean prod : dealer.getProduct()) {
-			if(prod.getOrderId()==oid) {
-				return prod;
+	public OrderDetails getPaymentDeatils(int oid,DealerInfoBean dealer) {
+		for (OrderDetails order : dealer.getOrders()) {
+			if(order.getOrderId()==oid) {
+				return order;
 			}
 		}
 		return null;
 	}
-	
-	
-	
+
+	@Override
+	public boolean checkIdAvailability(int id) {
+		Iterator<DealerInfoBean> itr = CollectionDbClass.dealerSet.iterator();
+		if(itr.hasNext()) {
+		while (itr.hasNext()) {
+			DealerInfoBean bean = itr.next();
+			if (bean.getDealerId()==id) {
+				return false;
+			} else {
+				return true;
+			}
+		}
+		return false;
+	 } else {
+		return true;
+	}
+	}
+
+	@Override
+	public boolean checkNameAvailability(String name) {
+		Iterator<DealerInfoBean> itr = CollectionDbClass.dealerSet.iterator();
+		if(itr.hasNext()) {
+		while (itr.hasNext()) {
+			DealerInfoBean bean = itr.next();
+			if (bean.getDealerName().equalsIgnoreCase(name)) {
+				return false;
+			} else {
+				return true;
+			}
+		}
+		return false;
+	 } else {
+		return true;
+	}
+	}
+
+	@Override
+	public boolean setDeliveredDate(String date,int id,DealerInfoBean dealer) {
+		
+		for (OrderDetails order : dealer.getOrders()) {
+			if(order.getOrderId()==id) {
+				Period p1 = Period.between(order.getDateOfOrder(), order.getDateOfDelivery());
+				LocalDate deliveredDate = LocalDate.parse(date);
+				if(deliveredDate.isBefore(order.getDateOfOrder())) {
+					return false;
+				} else {
+				Period p2 = Period.between(deliveredDate, order.getDateOfDelivery());
+				if(p2.getDays()<=p1.getDays()) {
+					order.setStatus("Delivered");
+					return true;
+				} else {
+					order.setStatus("Order Delivered Lately");
+					return true;
+				}
+				}
+			}
+		}
+		
+		
+		return false;
+	}
 }
